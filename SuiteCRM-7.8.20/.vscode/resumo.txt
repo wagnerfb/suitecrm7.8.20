@@ -1,0 +1,23 @@
+    //masip
+    uploadAttachmentSuccessful: function(o) {
+        document.getElementById('email_attachment').value = '';
+        var ret_JSON = YAHOO.lang.JSON.parse(JSON.stringify(o.responseText));
+        for (let i = 0; i < ret_JSON.length; i++) {
+            var ret = YAHOO.lang.JSON.parse(JSON.stringify(ret_JSON[i]));
+            ret.name[i] = escape(ret.name[i]);
+            var idx = SUGAR.email2.composeLayout.currentInstanceId;
+            var overall = document.getElementById('addedFiles' + idx);
+            var index = overall.childNodes.length;
+            var out = "<div id='email_attachment_bucket" + idx + index + "'>" + "<img src='index.php?entryPoint=getImage&themeName=" + SUGAR.themes.theme_name + "&imageName=minus.gif' " + "style='cursor:pointer' align='absmiddle' onclick='SUGAR.email2.composeLayout.deleteUploadAttachment(\"" +
+                idx + index + "\",\"" + ret.guid[i] + ret.name[i] + "\");'/>" + "<img src='index.php?entryPoint=getImage&themeName=" + SUGAR.themes.theme_name + "&imageName=attachment.gif' " + "id='email_attachmentImage'" + idx + index + "align='absmiddle' />" + "<input type='hidden' value='" + ret.guid[i] + ret.name[i] + "' name='email_attachment" + index + "' id='email_attachment" + idx + index + "' />" +
+                ((ret.nameForDisplay != null) ? ret.nameForDisplay + "&nbsp;" : ret.name[i] + "&nbsp;") + "<br/>" + "</div>";
+            overall.innerHTML += out;
+            if (SUGAR.email2.util.isIe()) {
+                document.getElementById('addedFiles' + idx).innerHTML = document.getElementById('addedFiles' + idx).innerHTML;
+            }
+            SUGAR.email2.addFileDialog.hide();
+            SUGAR.email2.composeLayout.showAttachmentPanel(idx);
+            
+        }
+       
+    }
